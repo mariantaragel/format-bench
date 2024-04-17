@@ -1,0 +1,13 @@
+pandas
+numpy
+dask
+dask-expr
+pyarrow
+tables
+lxml
+openpyxl
+pylance
+fastavro
+pillow
+h5py
+lmdb

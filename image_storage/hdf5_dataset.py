@@ -1,8 +1,13 @@
+##
+# @file hdf5_dataset.py
+# @author Marián Tarageľ (xtarag01)
+
 from .image_storage import ImageStorage
 import numpy as np
 import h5py
 
 class Hdf5Image(ImageStorage):
+    """Storing images to a single HDF5 file"""
 
     filename = "tmp/test.h5"
     format_name = "HDF5"

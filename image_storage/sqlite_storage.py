@@ -1,8 +1,13 @@
+##
+# @file sqlite_storage.py
+# @author Marián Tarageľ (xtarag01)
+
 from .image_storage import ImageStorage
 import numpy as np
 import sqlite3
 
 class Sqlite(ImageStorage):
+    """Storing images to a SQLite databse"""
 
     filename = "tmp/test.db"
     format_name = "SQLite"
@@ -10,6 +15,10 @@ class Sqlite(ImageStorage):
     def save(self, images: list, labels: list):
         con = sqlite3.connect(self.filename)
         cur = con.cursor()
+
+        drop_table = "DROP TABLE IF EXISTS Data;"
+        cur.execute(drop_table)
+        con.commit()
 
         create_tabel = """CREATE TABLE Data (
             label INTEGER NOT NULL,

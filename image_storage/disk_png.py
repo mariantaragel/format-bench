@@ -1,3 +1,7 @@
+##
+# @file disk_png.py
+# @author Marián Tarageľ (xtarag01)
+
 from .image_storage import ImageStorage
 from PIL import Image
 import numpy as np
@@ -6,12 +10,13 @@ import csv
 import os
 
 class PngImage(ImageStorage):
+    """Storing images in separate .png files and metadata in .csv files"""
 
     filename = "tmp/test.csv"
     format_name = "PNG"
     pathname = "tmp/*.png"
 
-    def save(self, images, labels):
+    def save(self, images: list, labels: list):
         ids = []
         for id, img_arr in enumerate(images):
             Image.fromarray(img_arr).save(f"tmp/{id}.png")
@@ -22,7 +27,7 @@ class PngImage(ImageStorage):
             csv_witer.writerow(["id", "label"])
             csv_witer.writerows(list(zip(ids, labels)))
 
-    def read(self):
+    def read(self) -> tuple[list, list]:
         with open(self.filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
 
@@ -41,7 +46,7 @@ class PngImage(ImageStorage):
         
         return images, labels
     
-    def size(self):
+    def size(self) -> int:
         total_size = super().size()
 
         files = glob.glob(self.pathname)

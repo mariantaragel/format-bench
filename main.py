@@ -1,25 +1,25 @@
 from benchmarks import TabularBenchmarks
 from benchmarks import ParallelBenchmarks
 from benchmarks import ImageBenchmarks
-from data_generator import DataSet
+from data_generator import Generator
 import sys
 
-data_gen = DataSet()
+generator = Generator()
 
 if sys.argv[1] == "--tabular":
     benchmark = TabularBenchmarks()
-    ds = data_gen.gen_data_set(10_000, 6, 18, 0, 0, 0, 6)
-    results = benchmark.run(ds)
+    ds = generator.gen_dataset("test", 1000, 6, 18, 6, 0, 0, 0)
+    results = benchmark.run(ds.df)
 
 elif sys.argv[1] == "--parallel":
     benchmark = ParallelBenchmarks()
-    ds = data_gen.gen_data_set(1000, 6, 18, 0, 0, 0, 6)
-    results = benchmark.run(ds)
+    ds = generator.gen_dataset("test", 1000, 6, 18, 6, 0, 0, 0)
+    results = benchmark.run(ds.df)
 
 elif sys.argv[1] == "--image":
     benchmark = ImageBenchmarks()
-    ds = data_gen.load_imagenet_100(6000)
+    ds = generator.load_imagenet_100(50)
     results = benchmark.run(ds.images, ds.labels)
 
-#results.to_csv("results/results.csv", index=False)
+results.to_csv("results.csv", index=False)
 print(results)

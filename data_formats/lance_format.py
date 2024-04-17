@@ -1,3 +1,7 @@
+##
+# @file lance_format.py
+# @author Marián Tarageľ (xtarag01)
+
 from .data_format import DataFormat
 import pyarrow.dataset as pyds
 import pyarrow as pa
@@ -7,16 +11,21 @@ import lance
 import os
 
 class Lance(DataFormat):
+    """I/O operations with Lance data format"""
 
     format_name = "Lance"
     filetype = "lance"
 
-    def __init__(self, compression=None) -> None:
-        super().__init__(compression)
+    def __init__(self) -> None:
         self.filename = f"tmp/test.{self.filetype}"
 
-    def save(self, data_set: pd.DataFrame):
+    def save(self, data_set: pd.DataFrame, compression=None, complevel=None):
         uri = "tmp/data.parquet"
+        if os.path.exists(uri):
+            shutil.rmtree(uri)
+        if os.path.exists(self.filename):
+            shutil.rmtree(self.filename)
+
         tbl = pa.Table.from_pandas(data_set)
 
         pyds.write_dataset(tbl, uri, format="parquet")

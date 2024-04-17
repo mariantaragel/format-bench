@@ -1,9 +1,14 @@
+##
+# @file lmdb_storage.py
+# @author Marián Tarageľ (xtarag01)
+
 from .image_storage import ImageStorage
 import pickle
 import lmdb
 import os
 
 class LmdbImage(ImageStorage):
+    """Storing images to a Lightning Memory-Mapped Database"""
     
     filename = "tmp/test.lmdb"
     format_name = "LMDB"

@@ -1,3 +1,7 @@
+##
+# @file parquet_file.py
+# @author Marián Tarageľ (xtarag01)
+
 from .image_storage import ImageStorage
 import pyarrow.parquet as pq
 import pyarrow as pa
@@ -5,6 +9,7 @@ import pandas as pd
 import numpy as np
 
 class ParquetImage(ImageStorage):
+    """Storing images to a single Parquet file"""
 
     filename = "tmp/test.parquet"
     format_name = "Parquet"

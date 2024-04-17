@@ -1,35 +1,36 @@
+##
+# @file json_format.py
+# @author Marián Tarageľ (xtarag01)
+
 from .data_format import DataFormat
 import dask.dataframe as dd
 import pandas as pd
 
 class Json(DataFormat):
+    """I/O operations with JSON data format"""
 
     format_name = "JSON"
     filetype = "jsonl"
 
-    complevel: int
-
-    def __init__(self, compression=None, complevel=None) -> None:
-        super().__init__(compression)
+    def __init__(self) -> None:
         self.filename = f"tmp/test.{self.filetype}"
         self.pathname = f"{self.filename}/*.part"
-        self.complevel = complevel
 
-    def save(self, data_set: pd.DataFrame):
+    def save(self, data_set: pd.DataFrame, compression=None, complevel=None):
         data_set.to_json(
             self.filename,
             orient="records",
             lines=True,
             index=False,
-            compression={"method": self.compression, "level": self.complevel}
+            compression={"method": compression, "level": complevel}
         )
 
-    def parallel_save(self, data_set: pd.DataFrame):
-        dask_df = dd.from_pandas(data_set, npartitions=4)
+    def parallel_save(self, data_set: pd.DataFrame, n: int):
+        dask_df = dd.from_pandas(data_set, npartitions=n)
         dd.to_json(dask_df, self.filename, orient="records", lines=True, index=False)
 
-    def read(self) -> pd.DataFrame:
-        return pd.read_json(self.filename, orient="records", lines=True, engine="pyarrow", compression=self.compression)
+    def read(self, compression="infer") -> pd.DataFrame:
+        return pd.read_json(self.filename, lines=True, compression=compression)
 
     def parallel_read(self) -> pd.DataFrame:
-        return dd.read_json(self.pathname, orient="records", lines=True).compute()
+        return dd.read_json(self.pathname).compute()

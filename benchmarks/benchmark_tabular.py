@@ -10,13 +10,13 @@ class TabularBenchmarks:
         time = BenchmarkUtils.measure_time(lambda: format.save(ds))
         peak_mem = BenchmarkUtils.get_peak_memory()
         results["save_time (s)"] = round(time, 2)
-        results["save_peak_mem (kB)"] = round(peak_mem / 1000, 2)
+        results["save_peak_mem (MB)"] = round(peak_mem / 1000, 2)
 
     @staticmethod
     def benchmark_read(format, results):
         time = BenchmarkUtils.measure_time(lambda: format.read())
         peak_mem = BenchmarkUtils.get_peak_memory()
-        results["read_peak_mem (kB)"] = round(peak_mem / 1000, 2)
+        results["read_peak_mem (MB)"] = round(peak_mem / 1000, 2)
         results["read_time (s)"] = round(time, 2)
 
     def run(self, ds: pd.DataFrame) -> pd.DataFrame:

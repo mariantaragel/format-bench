@@ -1,3 +1,7 @@
+##
+# @file base64_string.py
+# @author Marián Tarageľ (xtarag01)
+
 from .image_storage import ImageStorage
 import numpy as np
 import base64
@@ -5,6 +9,7 @@ import csv
 import sys
 
 class Base64String(ImageStorage):
+    """Encoding images to Base64 strings"""
 
     filename = "tmp/test.csv"
     format_name = "Base64"

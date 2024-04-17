@@ -1,3 +1,8 @@
+##
+# @file file_utils.py
+# @author Marián Tarageľ (xtarag01)
+# @brief Class with utilities to manipulate with files
+
 import glob
 import os
 

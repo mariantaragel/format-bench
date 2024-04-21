@@ -11,3 +11,4 @@ fastavro
 pillow
 h5py
 lmdb
+datasets

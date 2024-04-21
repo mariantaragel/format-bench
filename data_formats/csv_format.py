@@ -19,8 +19,8 @@ class Csv(DataFormat):
     def save(self, data_set: pd.DataFrame, compression=None, complevel=None):
         data_set.to_csv(self.filename, index=False, compression={"method": compression, "level": complevel})
 
-    def parallel_save(self, data_set: pd.DataFrame, n: int):
-        dask_df = dd.from_pandas(data_set, npartitions=n)
+    def parallel_save(self, data_set):
+        dask_df = dd.from_delayed([data_set])
         dd.to_csv(dask_df, self.filename, index=False)
 
     def read(self, compression="infer") -> pd.DataFrame:

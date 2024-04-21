@@ -16,11 +16,11 @@ class Parquet(DataFormat):
         self.filename = f"tmp/test.{self.filetype}"
         self.pathname = f"{self.filename}/part.*.{self.filetype}"
 
-    def save(self, data_set: pd.DataFrame, compression=None):
+    def save(self, data_set: pd.DataFrame, compression=None, complevel=None):
         data_set.to_parquet(self.filename, index=False, engine="pyarrow", compression=compression)
 
-    def parallel_save(self, data_set: pd.DataFrame, n: int):
-        dask_df = dd.from_pandas(data_set, npartitions=n)
+    def parallel_save(self, data_set):
+        dask_df = dd.from_delayed([data_set])
         dd.to_parquet(dask_df, self.filename, write_index=False, engine="pyarrow")
 
     def read(self) -> pd.DataFrame:

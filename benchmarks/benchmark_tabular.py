@@ -7,28 +7,32 @@ class TabularBenchmarks:
 
     @staticmethod
     def benchmark_save(format, ds: pd.DataFrame, results):
+        peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.save(ds))
-        peak_mem = BenchmarkUtils.get_peak_memory()
+        peak_mem_after = BenchmarkUtils.get_peak_memory()
         results["save_time (s)"] = round(time, 2)
+        peak_mem = peak_mem_after - peak_mem_before
         results["save_peak_mem (MB)"] = round(peak_mem / 1000, 2)
 
     @staticmethod
     def benchmark_read(format, results):
+        peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.read())
-        peak_mem = BenchmarkUtils.get_peak_memory()
+        peak_mem_after = BenchmarkUtils.get_peak_memory()
+        peak_mem = peak_mem_after - peak_mem_before
         results["read_peak_mem (MB)"] = round(peak_mem / 1000, 2)
         results["read_time (s)"] = round(time, 2)
 
     def run(self, ds: pd.DataFrame) -> pd.DataFrame:
-        formats_tabular = [Csv(), Json(), Xml(), Hdf5Fixed(), Hdf5Table(), Parquet(),
-                        Feather(), Orc(), Pickle(), Excel(), Lance(), Avro()]
+        formats_tabular = [Hdf5Table()]
         manager = multiprocessing.Manager()
         results_tabular = []
         
         BenchmarkUtils.setup()
         
-        for format in formats_tabular:
+        for i, format in enumerate(formats_tabular):
             results = manager.dict()
+            print(f"[{round((i+1) / len(formats_tabular) * 100, 2)} %] benchmarking {format.format_name}")
             results["format_name"] = format.format_name
             
             p_save = multiprocessing.Process(target=self.benchmark_save, args=(format, ds, results))

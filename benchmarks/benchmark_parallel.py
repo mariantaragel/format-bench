@@ -1,6 +1,6 @@
 from data_formats import Csv, Json, Hdf5Table, Parquet, Orc
-from .benchmark_utils import BenchmarkUtils
 from dask.distributed import Client, LocalCluster
+from .benchmark_utils import BenchmarkUtils
 import multiprocessing
 import pandas as pd
 

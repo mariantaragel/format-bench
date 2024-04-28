@@ -1,3 +1,8 @@
+##
+# @file benchmark_tabular.py
+# @author Marián Tarageľ (xtarag01)
+# @brief Tabular benchmark suite
+
 from data_formats import Csv, Json, Xml, Hdf5Fixed, Hdf5Table, Parquet, Feather, Orc, Pickle, Excel, Lance, Avro
 from .benchmark_utils import BenchmarkUtils
 import multiprocessing
@@ -24,15 +29,19 @@ class TabularBenchmarks:
         results["read_time (s)"] = round(time, 2)
 
     def run(self, ds: pd.DataFrame) -> pd.DataFrame:
-        formats_tabular = [Hdf5Table()]
+        formats_tabular = [Csv(), Json(), Xml(), Hdf5Fixed(), Hdf5Table(), Parquet(),
+                            Feather(), Orc(), Pickle(), Excel(), Lance(), Avro()]
         manager = multiprocessing.Manager()
         results_tabular = []
         
         BenchmarkUtils.setup()
         
         for i, format in enumerate(formats_tabular):
+            
+            progress = round((i + 1) / len(formats_tabular) * 100, 2)
+            print(f"[{progress:.2f} %] Benchmarking {format.format_name}")
+
             results = manager.dict()
-            print(f"[{round((i+1) / len(formats_tabular) * 100, 2)} %] benchmarking {format.format_name}")
             results["format_name"] = format.format_name
             
             p_save = multiprocessing.Process(target=self.benchmark_save, args=(format, ds, results))

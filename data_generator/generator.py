@@ -66,10 +66,6 @@ class Generator:
         return Dataset(name, df=df)
 
     @staticmethod
-    def load_webface() -> Dataset:
-        return Dataset("webface")
-
-    @staticmethod
     def load_cifar_10(entries: int) -> Dataset:
         """
         Load Cifar-10 dataset
@@ -102,11 +98,13 @@ class Generator:
         return Dataset("Imagenet-100", images=images[:entries], labels=imagenet_100["label"][:entries])
 
     @staticmethod
-    def load_webface10M() -> Dataset:
-        """Load Webface10M datset"""
-        filename = "/home/xtarag01/synthetic_webface10M.h5"
-
-        with h5py.File(filename, "r") as f:
+    def load_webface10M(path: str) -> Dataset:
+        """
+        Load Webface10M datset
+        
+        path : location of the Webface10M dataset
+        """
+        with h5py.File(path, "r") as f:
             webface_key = list(f.keys())[1]
             webface = f[webface_key]
             webface_data = webface[:]

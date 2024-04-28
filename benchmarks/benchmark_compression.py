@@ -1,3 +1,8 @@
+##
+# @file benchmark_compression.py
+# @author Marián Tarageľ (xtarag01)
+# @brief Compression benchmark suite
+
 from data_formats import Csv, Json, Xml, Hdf5Fixed, Hdf5Table, Parquet, Feather, Orc, Pickle, Excel, Lance, Avro
 from .benchmark_utils import BenchmarkUtils
 import multiprocessing
@@ -6,9 +11,9 @@ import pandas as pd
 class CompressionBenchmarks:
 
     @staticmethod
-    def benchmark_save(format, ds: pd.DataFrame, results, compression):
+    def benchmark_save(format, ds: pd.DataFrame, results, compression, complevel: int):
         peak_mem_before = BenchmarkUtils.get_peak_memory()
-        time = BenchmarkUtils.measure_time(lambda: format.save(ds, compression, 1))
+        time = BenchmarkUtils.measure_time(lambda: format.save(ds, compression, complevel))
         peak_mem_after = BenchmarkUtils.get_peak_memory()
         results["save_time (s)"] = round(time, 2)
         peak_mem = peak_mem_after - peak_mem_before
@@ -23,19 +28,22 @@ class CompressionBenchmarks:
         results["read_peak_mem (MB)"] = round(peak_mem / 1000, 2)
         results["read_time (s)"] = round(time, 2)
 
-    def run(self, ds: pd.DataFrame, compression: str) -> pd.DataFrame:
-        formats_tabular = [Hdf5Table()]
+    def run(self, ds: pd.DataFrame, compression: str, complevel: int) -> pd.DataFrame:
+        formats_tabular = [Hdf5Table(), Parquet(), Feather(), Orc()]
         manager = multiprocessing.Manager()
         results_tabular = []
 
         BenchmarkUtils.setup()
 
         for i, format in enumerate(formats_tabular):
+
+            progress = round((i + 1) / len(formats_tabular) * 100, 2)
+            print(f"[{progress:.2f} %] benchmarking {format.format_name}")
+            
             results = manager.dict()
-            print(f"[{round((i+1) / len(formats_tabular) * 100, 2)} %] benchmarking {format.format_name}")
             results["format_name"] = format.format_name
 
-            p_save = multiprocessing.Process(target=self.benchmark_save, args=(format, ds, results, compression))
+            p_save = multiprocessing.Process(target=self.benchmark_save, args=(format, ds, results, compression, complevel))
             p_save.start()
             p_save.join()
 

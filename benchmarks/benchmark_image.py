@@ -1,3 +1,8 @@
+##
+# @file benchmark_image.py
+# @author Marián Tarageľ (xtarag01)
+# @brief Image benchmark suite
+
 from image_storage import PngImage, Base64String, Hdf5Image, ParquetImage, Sqlite, LmdbImage
 from .benchmark_utils import BenchmarkUtils
 import multiprocessing
@@ -32,8 +37,11 @@ class ImageBenchmarks:
         BenchmarkUtils.setup()
 
         for i, format in enumerate(formats_image):
+
+            progress = round((i + 1) / len(formats_image) * 100, 2)
+            print(f"[{progress:.2f} %] benchmarking {format.format_name}")
+            
             results = manager.dict()
-            print(f"[{round((i+1) / len(formats_image) * 100, 2)} %] benchmarking {format.format_name}")
             results["format_name"] = format.format_name
 
             p_save = multiprocessing.Process(target=self.benchmark_save, args=(format, images, labels, results))

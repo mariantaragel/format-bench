@@ -18,9 +18,9 @@ Run tabular benchmarks: `python3 main.py --tabular`
 
 Run image benchmarks and create report: `python3 main.py --image --report`
 
-Run compression benchmarks with the Webface10M dataset: `python3 main.py --compression --webface ~/webface10m.h5`
+Run compression benchmarks with the Webface10M dataset: `python3 main.py --compression --webface ~/synthetic_webface10M.h5`
 
-Run tabular benchmarks with the Webface10M dataset and create report: `python3 main.py --tabular --webface ~/webface10m.h5 --report`
+Run tabular benchmarks with the Webface10M dataset and create report: `python3 main.py --tabular --webface ~/synthetic_webface10M.h5 --report`
 
 ## Related publication
 TARAGEĽ, Marián. *Column-oriented and Image Data Format Benchmarks*. Brno, 2024. Bachelor’s thesis. Brno University of Technology, Faculty of Information Technology. Supervisor Ing. Jakub Špaňhel

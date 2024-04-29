@@ -7,7 +7,7 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def show_results(resulst: pd.DataFrame, location: str, report_path: str = None):
+def show_results(results: pd.DataFrame, location: str, report_path: str = None):
     """
     Print results to the terminal, write them to CSV file and optionally create report
     

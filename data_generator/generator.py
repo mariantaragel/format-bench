@@ -79,7 +79,7 @@ class Generator:
             img_array = np.array(img)
             images.append(img_array)
 
-        return Dataset("Cifar-10", images=images[:entries], labels=cifar_10["label"][:entries])
+        return Dataset("CIFAR-10", images=images[:entries], labels=cifar_10["label"][:entries])
 
     @staticmethod
     def load_imagenet_100(entries: int) -> Dataset:
@@ -95,7 +95,7 @@ class Generator:
             img_array = np.array(img)
             images.append(img_array)
 
-        return Dataset("Imagenet-100", images=images[:entries], labels=imagenet_100["label"][:entries])
+        return Dataset("ImageNet-100", images=images[:entries], labels=imagenet_100["label"][:entries])
 
     @staticmethod
     def load_webface10M(path: str) -> Dataset:

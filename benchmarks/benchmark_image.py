@@ -58,7 +58,7 @@ class ImageBenchmarks:
         for i, format in enumerate(formats_image):
 
             progress = round((i + 1) / len(formats_image) * 100, 2)
-            print(f"[{progress:.2f} %] benchmarking {format.format_name}")
+            print(f"[{progress:.2f} %] Benchmarking {format.format_name}")
             
             results = manager.dict()
             results["format_name"] = format.format_name

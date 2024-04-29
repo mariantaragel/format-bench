@@ -77,7 +77,7 @@ if __name__ == '__main__':
         print("· Preparing Image benchmark")
         datasets = [
             generator.load_cifar_10(50_000),
-            #generator.load_imagenet_100(126_689)
+            generator.load_imagenet_100(126_689)
         ]
         for dataset in datasets:
             print(f"· Running Image benchmark on dataset {dataset}")

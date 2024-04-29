@@ -1,7 +1,6 @@
 ##
 # @file benchmark_image.py
 # @author Marián Tarageľ (xtarag01)
-# @brief Image benchmark suite
 
 from image_storage import PngImage, Base64String, Hdf5Image, ParquetImage, Sqlite, LmdbImage
 from .benchmark_utils import BenchmarkUtils
@@ -9,9 +8,17 @@ import multiprocessing
 import pandas as pd
 
 class ImageBenchmarks:
+    """Image benchmark suite"""
 
     @staticmethod
     def benchmark_save(format, images: list, labels: list, results):
+        """
+        Benchmark the saving process
+
+        images : list of images to save
+        labels : list of labels to save
+        results : dictionary with results of the benchmarks
+        """
         peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.save(images, labels))
         peak_mem_after = BenchmarkUtils.get_peak_memory()
@@ -21,6 +28,12 @@ class ImageBenchmarks:
 
     @staticmethod
     def benchmark_read(format, results):
+        """
+        Benchmark the reading process
+
+        format : data format to benchmark
+        results : dictionary with results of the benchmarks
+        """
         peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.read())
         peak_mem_after = BenchmarkUtils.get_peak_memory()
@@ -30,6 +43,12 @@ class ImageBenchmarks:
         results["read_time (s)"] = round(time, 2)
 
     def run(self, images: list, labels: list) -> pd.DataFrame:
+        """
+        Execute the image benchmarks
+
+        images : list of images to save
+        labels : list of labels to save
+        """
         formats_image = [PngImage(), Base64String(), Hdf5Image(), ParquetImage(), Sqlite(), LmdbImage()]
         manager = multiprocessing.Manager()
         results_image = []

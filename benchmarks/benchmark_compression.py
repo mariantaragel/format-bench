@@ -1,7 +1,6 @@
 ##
 # @file benchmark_compression.py
 # @author Marián Tarageľ (xtarag01)
-# @brief Compression benchmark suite
 
 from data_formats import Csv, Json, Xml, Hdf5Fixed, Hdf5Table, Parquet, Feather, Orc, Pickle, Excel, Lance, Avro
 from .benchmark_utils import BenchmarkUtils
@@ -9,9 +8,19 @@ import multiprocessing
 import pandas as pd
 
 class CompressionBenchmarks:
+    """Compression benchmark suite"""
 
     @staticmethod
-    def benchmark_save(format, ds: pd.DataFrame, results, compression, complevel: int):
+    def benchmark_save(format, ds: pd.DataFrame, results, compression: str, complevel: int):
+        """
+        Benchmark the saving process
+        
+        format : data format to benchmark
+        ds : data for the benchmark
+        results : dictionary with results of the benchmarks
+        compression : which compression codec to use
+        complevel : compression level
+        """
         peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.save(ds, compression, complevel))
         peak_mem_after = BenchmarkUtils.get_peak_memory()
@@ -21,6 +30,12 @@ class CompressionBenchmarks:
 
     @staticmethod
     def benchmark_read(format, results):
+        """
+        Benchmark the reading process
+
+        format : data format to benchmark
+        results : dictionary with results of the benchmarks
+        """
         peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.read())
         peak_mem_after = BenchmarkUtils.get_peak_memory()
@@ -29,6 +44,13 @@ class CompressionBenchmarks:
         results["read_time (s)"] = round(time, 2)
 
     def run(self, ds: pd.DataFrame, compression: str, complevel: int) -> pd.DataFrame:
+        """
+        Execute the compression benchmarks
+
+        ds : data for the benchmark
+        compression : which compression codec to use
+        complevel : compression level
+        """
         formats_tabular = [Hdf5Table(), Parquet(), Feather(), Orc()]
         manager = multiprocessing.Manager()
         results_tabular = []

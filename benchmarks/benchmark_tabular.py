@@ -1,7 +1,6 @@
 ##
 # @file benchmark_tabular.py
 # @author Marián Tarageľ (xtarag01)
-# @brief Tabular benchmark suite
 
 from data_formats import Csv, Json, Xml, Hdf5Fixed, Hdf5Table, Parquet, Feather, Orc, Pickle, Excel, Lance, Avro
 from .benchmark_utils import BenchmarkUtils
@@ -9,9 +8,17 @@ import multiprocessing
 import pandas as pd
 
 class TabularBenchmarks:
+    """Tabular benchmark suite"""
 
     @staticmethod
     def benchmark_save(format, ds: pd.DataFrame, results):
+        """
+        Benchmark the saving process
+
+        format : data format to benchmark
+        ds : data for the benchmark
+        results : dictionary with results of the benchmarks
+        """
         peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.save(ds))
         peak_mem_after = BenchmarkUtils.get_peak_memory()
@@ -21,6 +28,12 @@ class TabularBenchmarks:
 
     @staticmethod
     def benchmark_read(format, results):
+        """
+        Benchmark the reading process
+
+        format : data format to benchmark
+        results : dictionary with results of the benchmarks
+        """
         peak_mem_before = BenchmarkUtils.get_peak_memory()
         time = BenchmarkUtils.measure_time(lambda: format.read())
         peak_mem_after = BenchmarkUtils.get_peak_memory()
@@ -29,6 +42,11 @@ class TabularBenchmarks:
         results["read_time (s)"] = round(time, 2)
 
     def run(self, ds: pd.DataFrame) -> pd.DataFrame:
+        """
+        Execute the tabular benchmarks
+
+        ds : data for the benchmark
+        """
         formats_tabular = [Csv(), Json(), Xml(), Hdf5Fixed(), Hdf5Table(), Parquet(),
                             Feather(), Orc(), Pickle(), Excel(), Lance(), Avro()]
         manager = multiprocessing.Manager()

@@ -49,7 +49,7 @@ if __name__ == '__main__':
             report_path = None
             if args.report:
                 report_path = f"tabular_{dataset}.pdf"
-            show_results(location, report_path)
+            show_results(results, location, report_path)
 
     if args.compression:
         benchmark = CompressionBenchmarks()
@@ -70,7 +70,7 @@ if __name__ == '__main__':
                 report_path = None
                 if args.report:
                     report_path = f"compression_{dataset}_{compression}.pdf"
-                show_results(location, report_path)
+                show_results(results, location, report_path)
 
     if args.image:
         benchmark = ImageBenchmarks()
@@ -87,4 +87,4 @@ if __name__ == '__main__':
             report_path = None
             if args.report:
                 report_path = f"image_{dataset}.pdf"
-            show_results(location, report_path)
+            show_results(results, location, report_path)
